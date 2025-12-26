@@ -5,7 +5,8 @@ import java.util.Date;
 public class SinhVien {
     private String maSV;
     private String maLop;
-    private String hoTen;
+    private String ho;
+    private String ten;
     private Date ngaySinh;
     private String soDienThoai;
     private boolean gioiTinh; // true = nam, false = nu
@@ -14,10 +15,11 @@ public class SinhVien {
     private String ghiChu;
 //  contructor
     public SinhVien() {}
-    public SinhVien(String maSV, String maLop, String hoTen, Date ngaySinh, String soDienThoai, boolean gioiTinh, String noiSinh, String diaChi, String ghiChu) {
+    public SinhVien(String maSV, String maLop, String ho, String ten, Date ngaySinh, String soDienThoai, boolean gioiTinh, String noiSinh, String diaChi, String ghiChu) {
         this.maSV = maSV;
         this.maLop = maLop;
-        this.hoTen = hoTen;
+        this.ho = ho;
+        this.ten = ten;
         this.ngaySinh = ngaySinh;
         this.soDienThoai = soDienThoai;
         this.gioiTinh = gioiTinh;
@@ -38,11 +40,17 @@ public class SinhVien {
     public void setMaLop(String maLop) {
         this.maLop = maLop;
     }
-    public String getHoTen() {
-        return hoTen;
+    public String getHo() {
+        return ho;
     }
-    public void setHoTen(String hoTen) {
-        this.hoTen = hoTen;
+    public void setHo(String ho) {
+        this.ho = ho;
+    }
+    public String getTen() {
+        return ten;
+    }
+    public void setTen(String ten) {
+        this.ten = ten;
     }
     public Date getNgaySinh() {
         return ngaySinh;
