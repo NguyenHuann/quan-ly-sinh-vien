@@ -77,5 +77,28 @@ public class SinhVienDAO {
         }
         return list;
     }
-//    tim sinh vien theo
+//    sua thong tin sinh vien
+    public boolean update(SinhVien sv) {
+        String sql = "update SinhVien set MaLop=?, Ho=?, Ten=?, GioiTinh=?, NgaySinh=?, NoiSinh=?, DiaChi=?, SoDienThoai=?, ChinhTri=?,  GhiChu=? where MaSinhVien = ?";
+        try (Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setString(1, sv.getMaLop());
+            ps.setString(2, sv.getHo());
+            ps.setString(3,sv.getTen());
+            ps.setBoolean(4, sv.isGioiTinh());
+            ps.setDate(5, new java.sql.Date(sv.getNgaySinh().getTime()));
+            ps.setString(6, sv.getNoiSinh());
+            ps.setString(7, sv.getDiaChi());
+            ps.setString(8, sv.getSoDienThoai());
+            ps.setString(9, sv.getChinhTri());
+            ps.setString(10, sv.getGhiChu());
+
+            ps.setString(11, sv.getMaSV());
+
+            return ps.executeUpdate() > 0;
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
