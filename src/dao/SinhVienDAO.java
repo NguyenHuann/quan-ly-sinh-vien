@@ -2,6 +2,8 @@ package dao;
 
 import dto.SinhVien;
 import util.DBConnection;
+import java.util.List;
+import java.util.ArrayList;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,5 +48,32 @@ public class SinhVienDAO {
             e.printStackTrace();
         }
         return false;
+    }
+//    lay danh sach sinh vien
+    public List<SinhVien> getAll() {
+        List<SinhVien> list = new ArrayList<>();
+        String sql = "select * from SinhVien order by Ten, Ho";
+        try (Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql);
+        ResultSet rs = ps.executeQuery()) {
+            while (rs.next()){
+                SinhVien sv = new SinhVien();
+                sv.setMaSV(rs.getString("MaSinhVien"));
+                sv.setMaLop(rs.getString("MaLop"));
+                sv.setHo(rs.getString("Ho"));
+                sv.setTen(rs.getString("Ten"));
+                sv.setGioiTinh(rs.getBoolean("GioiTinh"));
+                sv.setNgaySinh(rs.getDate("NgaySinh"));
+                sv.setNoiSinh(rs.getString("NoiSinh"));
+                sv.setDiaChi(rs.getString("DiaChi"));
+                sv.setSoDienTHoai(rs.getString("SoDienThoai"));
+                sv.setGhiChu(rs.getString("GhiChu"));
+
+                list.add(sv);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return list;
     }
 }
