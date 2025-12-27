@@ -66,7 +66,7 @@ public class SinhVienDAO {
                 sv.setNgaySinh(rs.getDate("NgaySinh"));
                 sv.setNoiSinh(rs.getString("NoiSinh"));
                 sv.setDiaChi(rs.getString("DiaChi"));
-                sv.setSoDienTHoai(rs.getString("SoDienThoai"));
+                sv.setSoDienThoai(rs.getString("SoDienThoai"));
                 sv.setGhiChu(rs.getString("GhiChu"));
 
                 list.add(sv);
@@ -76,4 +76,5 @@ public class SinhVienDAO {
         }
         return list;
     }
+//    tim sinh vien theo
 }

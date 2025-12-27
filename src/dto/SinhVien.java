@@ -61,7 +61,7 @@ public class SinhVien {
     public String getSoDienThoai() {
         return soDienThoai;
     }
-    public void setSoDienTHoai(String soDienThoai) {
+    public void setSoDienThoai(String soDienThoai) {
         this.soDienThoai = soDienThoai;
     }
     public boolean isGioiTinh() {
