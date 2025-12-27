@@ -101,4 +101,17 @@ public class SinhVienDAO {
         }
         return false;
     }
+//    xoa sinh vien
+    public boolean delete(String maSV) {
+        String sql = "delete from SinhVien where MaSinhVien=?";
+        try (Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, maSV);
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
