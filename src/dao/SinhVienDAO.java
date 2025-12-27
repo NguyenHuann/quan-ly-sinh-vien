@@ -14,8 +14,8 @@ public class SinhVienDAO {
 //    them sinh vien
     public boolean insert(SinhVien sv) {
         String sql = "insert into SinhVien "
-                + "(MaSinhVien, MaLop, Ho, Ten, GioiTinh, NgaySinh, NoiSinh, DiaChi, SoDienThoai, GhiChu) "
-                + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?";
+                + "(MaSinhVien, MaLop, Ho, Ten, GioiTinh, NgaySinh, NoiSinh, DiaChi, SoDienThoai, ChinhTri, GhiChu) "
+                + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
         PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, sv.getMaSV());
@@ -27,7 +27,8 @@ public class SinhVienDAO {
             ps.setString(7, sv.getNoiSinh());
             ps.setString(8, sv.getDiaChi());
             ps.setString(9, sv.getSoDienThoai());
-            ps.setString(10, sv.getGhiChu());
+            ps.setString(10, sv.getChinhTri());
+            ps.setString(11, sv.getGhiChu());
 
             return ps.executeUpdate() > 0;
         }catch (SQLException e) {

@@ -12,10 +12,11 @@ public class SinhVien {
     private boolean gioiTinh; // true = nam, false = nu
     private String noiSinh;
     private String diaChi;
+    private String chinhTri;
     private String ghiChu;
 //  contructor
     public SinhVien() {}
-    public SinhVien(String maSV, String maLop, String ho, String ten, Date ngaySinh, String soDienThoai, boolean gioiTinh, String noiSinh, String diaChi, String ghiChu) {
+    public SinhVien(String maSV, String maLop, String ho, String ten, Date ngaySinh, String soDienThoai, boolean gioiTinh, String noiSinh, String diaChi,String chinhTri, String ghiChu) {
         this.maSV = maSV;
         this.maLop = maLop;
         this.ho = ho;
@@ -24,6 +25,7 @@ public class SinhVien {
         this.soDienThoai = soDienThoai;
         this.gioiTinh = gioiTinh;
         this.noiSinh = noiSinh;
+        this.chinhTri = chinhTri;
         this.diaChi = diaChi;
         this.ghiChu = ghiChu;
     }
@@ -81,6 +83,10 @@ public class SinhVien {
     }
     public void setDiaChi(String diaChi) {
         this.diaChi = diaChi;
+    }
+    public String getChinhTri() {return chinhTri;}
+    public void setChinhTri(String chinhTri) {
+        this.chinhTri = chinhTri;
     }
     public String getGhiChu() {
         return ghiChu;
