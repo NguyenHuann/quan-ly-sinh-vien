@@ -144,4 +144,36 @@ public class SinhVienDAO {
         }
         return list;
     }
+//    tim kiem
+    public List<SinhVien> search(String keyword) {
+        List<SinhVien> list = new ArrayList<>();
+        String sql = "select * from SinhVien where MaSinhVien like ? or Ho like ? or Ten like ?";
+        try(Connection con = DBConnection.getConnection();
+        PreparedStatement ps = con.prepareStatement(sql)) {
+            String query = "%"+keyword+"%";
+            ps.setString(1, query);
+            ps.setString(2, query);
+            ps.setString(3, query);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                SinhVien sv = new SinhVien();
+                sv.setMaSV(rs.getString("MaSinhVien"));
+                sv.setMaLop(rs.getString("MaLop"));
+                sv.setHo(rs.getString("Ho"));
+                sv.setTen(rs.getString("Ten"));
+                sv.setGioiTinh(rs.getBoolean("GioiTinh"));
+                sv.setNgaySinh(rs.getDate("NgaySinh"));
+                sv.setNoiSinh(rs.getString("NoiSinh"));
+                sv.setDiaChi(rs.getString("DiaChi"));
+                sv.setSoDienThoai(rs.getString("SoDienThoai"));
+                sv.setChinhTri(rs.getString("Chinhtri"));
+                sv.setGhiChu(rs.getString("GhiChu"));
+                list.add(sv);
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }
