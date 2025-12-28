@@ -33,5 +33,11 @@ public class SinhVienBUS {
             return "Lỗi khi thêm vào CSDL";
         }
     }
-
+//    cap nhat sinh vien
+    public String updateSinhVien(SinhVien sv) {
+        if (sinhVienDAO.update(sv)) {
+            return "Cập nhật thành công!";
+        }else
+            return "Cập nhật thất bại";
+    }
 }
