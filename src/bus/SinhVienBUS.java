@@ -40,4 +40,11 @@ public class SinhVienBUS {
         }else
             return "Cập nhật thất bại";
     }
+//    xoa sinh vien
+    public String deleteSinhVien(String maSV) {
+        if (sinhVienDAO.delete(maSV)) {
+            return "Xóa thành công!";
+        }else
+            return "Xóa thất bại!";
+    }
 }
