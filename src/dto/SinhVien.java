@@ -14,7 +14,7 @@ public class SinhVien {
     private String diaChi;
     private String chinhTri;
     private String ghiChu;
-//  contructor
+//  constructor
     public SinhVien() {}
     public SinhVien(String maSV, String maLop, String ho, String ten, Date ngaySinh, String soDienThoai, boolean gioiTinh, String noiSinh, String diaChi,String chinhTri, String ghiChu) {
         this.maSV = maSV;
