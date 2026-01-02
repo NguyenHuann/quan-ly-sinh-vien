@@ -2,112 +2,67 @@ package dao;
 
 import dto.SinhVien;
 import util.DBConnection;
-import java.util.List;
+import java.sql.*;
 import java.util.ArrayList;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.List;
 
 public class SinhVienDAO {
-//    them sinh vien
-    public boolean insert(SinhVien sv) {
-        String sql = "insert into SinhVien "
-                + "(MaSinhVien, MaLop, Ho, Ten, GioiTinh, NgaySinh, NoiSinh, DiaChi, SoDienThoai, ChinhTri, GhiChu) "
-                + "values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection con = DBConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, sv.getMaSV());
-            ps.setString(2, sv.getMaLop());
-            ps.setString(3, sv.getHo());
-            ps.setString(4,sv.getTen());
-            ps.setBoolean(5,sv.isGioiTinh());
-            ps.setDate(6, new java.sql.Date(sv.getNgaySinh().getTime()));
-            ps.setString(7, sv.getNoiSinh());
-            ps.setString(8, sv.getDiaChi());
-            ps.setString(9, sv.getSoDienThoai());
-            ps.setString(10, sv.getChinhTri());
-            ps.setString(11, sv.getGhiChu());
-
-            return ps.executeUpdate() > 0;
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-//    kiem tra trung ma
-    public boolean existById(String maSV) {
-        String sql = "select 1 from SinhVien where MaSinhVien = ?";
-        try (Connection con = DBConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, maSV);
-            ResultSet rs = ps.executeQuery();
-            return rs.next();
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-//    lay danh sach sinh vien
+//    lấy toàn bộ danh sách sinh viên
     public List<SinhVien> getAll() {
         List<SinhVien> list = new ArrayList<>();
-        String sql = "select * from SinhVien order by Ten, Ho";
-        try (Connection con = DBConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql);
-        ResultSet rs = ps.executeQuery()) {
-            while (rs.next()){
-                SinhVien sv = new SinhVien();
-                sv.setMaSV(rs.getString("MaSinhVien"));
-                sv.setMaLop(rs.getString("MaLop"));
-                sv.setHo(rs.getString("Ho"));
-                sv.setTen(rs.getString("Ten"));
-                sv.setGioiTinh(rs.getBoolean("GioiTinh"));
-                sv.setNgaySinh(rs.getDate("NgaySinh"));
-                sv.setNoiSinh(rs.getString("NoiSinh"));
-                sv.setDiaChi(rs.getString("DiaChi"));
-                sv.setSoDienThoai(rs.getString("SoDienThoai"));
-                sv.setChinhTri(rs.getString("ChinhTri"));
-                sv.setGhiChu(rs.getString("GhiChu"));
+        String sql = "SELECT * FROM tblSinhVien ORDER BY TenSV, HoSV";
 
-                list.add(sv);
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                list.add(mapResultSetToSinhVien(rs));
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return list;
     }
-//    sua thong tin sinh vien
-    public boolean update(SinhVien sv) {
-        String sql = "update SinhVien set MaLop=?, Ho=?, Ten=?, GioiTinh=?, NgaySinh=?, NoiSinh=?, DiaChi=?, SoDienThoai=?, ChinhTri=?,  GhiChu=? where MaSinhVien = ?";
+//    lấy danh sách sinh viên theo lớp
+    public List<SinhVien> getByLop(String maLop) {
+        List<SinhVien> list = new ArrayList<>();
+        String sql = "SELECT * FROM tblSinhVien WHERE MaLop = ? ORDER BY TenSV, HoSV";
+
         try (Connection con = DBConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setString(1, sv.getMaLop());
-            ps.setString(2, sv.getHo());
-            ps.setString(3,sv.getTen());
-            ps.setBoolean(4, sv.isGioiTinh());
-            ps.setDate(5, new java.sql.Date(sv.getNgaySinh().getTime()));
-            ps.setString(6, sv.getNoiSinh());
-            ps.setString(7, sv.getDiaChi());
-            ps.setString(8, sv.getSoDienThoai());
-            ps.setString(9, sv.getChinhTri());
-            ps.setString(10, sv.getGhiChu());
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-            ps.setString(11, sv.getMaSV());
+            ps.setString(1, maLop);
 
-            return ps.executeUpdate() > 0;
-        }catch (SQLException e) {
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapResultSetToSinhVien(rs));
+                }
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return list;
     }
-//    xoa sinh vien
-    public boolean delete(String maSV) {
-        String sql = "delete from SinhVien where MaSinhVien=?";
+//    thêm sinh viên mới
+    public boolean insert(SinhVien sv) {
+        String sql = "INSERT INTO tblSinhVien "
+                + "(MaSV, MaLop, HoSV, TenSV, GioiTinh, NgaySinh, NoiSinh, DiaChi, DienThoai, Email) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (Connection con = DBConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, maSV);
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, sv.getMaSV());
+            ps.setString(2, sv.getMaLop());
+            ps.setString(3, sv.getHoSV());
+            ps.setString(4, sv.getTenSV());
+            ps.setBoolean(5, sv.isGioiTinh()); // BIT trong SQL
+            ps.setDate(6, new java.sql.Date(sv.getNgaySinh().getTime()));
+            ps.setString(7, sv.getNoiSinh());
+            ps.setString(8, sv.getDiaChi());
+            ps.setString(9, sv.getDienThoai());
+            ps.setString(10, sv.getEmail());
 
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -115,65 +70,116 @@ public class SinhVienDAO {
         }
         return false;
     }
-//    loc theo lop
-    public List<SinhVien> getByLop(String maLop ) {
-        List<SinhVien> list = new ArrayList<>();
-        String sql = "select * from SinhVien where MaLop = ?";
-        try(Connection con = DBConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setString(1, maLop);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                SinhVien sv = new SinhVien();
-                sv.setMaSV(rs.getString("MaSinhVien"));
-                sv.setMaLop(rs.getString("MaLop"));
-                sv.setHo(rs.getString("Ho"));
-                sv.setTen(rs.getString("Ten"));
-                sv.setGioiTinh(rs.getBoolean("GioiTinh"));
-                sv.setNgaySinh(rs.getDate("NgaySinh"));
-                sv.setNoiSinh(rs.getString("NoiSinh"));
-                sv.setDiaChi(rs.getString("DiaChi"));
-                sv.setSoDienThoai(rs.getString("SoDienThoai"));
-                sv.setChinhTri(rs.getString("Chinhtri")); // Nhớ thêm cột này
-                sv.setGhiChu(rs.getString("GhiChu"));
+//    cập nhật thông tin sinh viên
+    public boolean update(SinhVien sv) {
+        String sql = "UPDATE tblSinhVien SET MaLop=?, HoSV=?, TenSV=?, GioiTinh=?, NgaySinh=?, "
+                + "NoiSinh=?, DiaChi=?, DienThoai=?, Email=? WHERE MaSV=?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
 
-                list.add(sv);
-            }
-        }catch (SQLException e) {
+            ps.setString(1, sv.getMaLop());
+            ps.setString(2, sv.getHoSV());
+            ps.setString(3, sv.getTenSV());
+            ps.setBoolean(4, sv.isGioiTinh());
+            ps.setDate(5, new java.sql.Date(sv.getNgaySinh().getTime()));
+            ps.setString(6, sv.getNoiSinh());
+            ps.setString(7, sv.getDiaChi());
+            ps.setString(8, sv.getDienThoai());
+            ps.setString(9, sv.getEmail());
+            // Điều kiện WHERE
+            ps.setString(10, sv.getMaSV());
+
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return list;
+        return false;
     }
-//    tim kiem
+//    xóa sinh viên
+    public boolean delete(String maSV) {
+        String sql = "DELETE FROM tblSinhVien WHERE MaSV = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, maSV);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            // e.printStackTrace();
+            System.out.println("Không thể xóa sinh viên này (có thể do đang có bảng điểm).");
+        }
+        return false;
+    }
+//    tìm kiếm sinh viên theo mã hoặc theo tên
     public List<SinhVien> search(String keyword) {
         List<SinhVien> list = new ArrayList<>();
-        String sql = "select * from SinhVien where MaSinhVien like ? or Ho like ? or Ten like ?";
-        try(Connection con = DBConnection.getConnection();
-        PreparedStatement ps = con.prepareStatement(sql)) {
-            String query = "%"+keyword+"%";
+        // Tìm gần đúng trong MaSV, HoSV hoặc TenSV
+        String sql = "SELECT * FROM tblSinhVien WHERE MaSV LIKE ? OR HoSV LIKE ? OR TenSV LIKE ?";
+
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            String query = "%" + keyword + "%";
             ps.setString(1, query);
             ps.setString(2, query);
             ps.setString(3, query);
 
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                SinhVien sv = new SinhVien();
-                sv.setMaSV(rs.getString("MaSinhVien"));
-                sv.setMaLop(rs.getString("MaLop"));
-                sv.setHo(rs.getString("Ho"));
-                sv.setTen(rs.getString("Ten"));
-                sv.setGioiTinh(rs.getBoolean("GioiTinh"));
-                sv.setNgaySinh(rs.getDate("NgaySinh"));
-                sv.setNoiSinh(rs.getString("NoiSinh"));
-                sv.setDiaChi(rs.getString("DiaChi"));
-                sv.setSoDienThoai(rs.getString("SoDienThoai"));
-                sv.setChinhTri(rs.getString("Chinhtri"));
-                sv.setGhiChu(rs.getString("GhiChu"));
-                list.add(sv);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(mapResultSetToSinhVien(rs));
+                }
             }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return list;
+    }
+//    kiểm tra trùng mã sinh viên
+    public boolean existById(String maSV) {
+        String sql = "SELECT 1 FROM tblSinhVien WHERE MaSV = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, maSV);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+//  lấy thông tin sinh viên theo id
+    public SinhVien getById(String maSV) {
+        String sql = "SELECT * FROM tblSinhVien WHERE MaSV = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, maSV);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToSinhVien(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Helper: Ánh xạ từ ResultSet sang Object SinhVien
+     */
+    private SinhVien mapResultSetToSinhVien(ResultSet rs) throws SQLException {
+        SinhVien sv = new SinhVien();
+        sv.setMaSV(rs.getString("MaSV"));
+        sv.setMaLop(rs.getString("MaLop"));
+        sv.setHoSV(rs.getString("HoSV"));
+        sv.setTenSV(rs.getString("TenSV"));
+        sv.setGioiTinh(rs.getBoolean("GioiTinh")); // boolean
+        sv.setNgaySinh(rs.getDate("NgaySinh"));
+        sv.setNoiSinh(rs.getString("NoiSinh"));
+        sv.setDiaChi(rs.getString("DiaChi"));
+        sv.setDienThoai(rs.getString("DienThoai"));
+        sv.setEmail(rs.getString("Email"));
+        return sv;
     }
 }
