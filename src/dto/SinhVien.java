@@ -15,7 +15,7 @@ public class SinhVien {
 
     public SinhVien() {}
 
-    // Constructor đầy đủ
+    // Constructor
     public SinhVien(String maSV, String maLop, String hoSV, String tenSV, boolean gioiTinh, Date ngaySinh, String noiSinh, String diaChi, String dienThoai, String email) {
         this.maSV = maSV;
         this.maLop = maLop;

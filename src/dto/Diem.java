@@ -5,8 +5,6 @@ public class Diem {
     private String maSV;   // SQL: MaSV
     private double diem;   // SQL: Diem (FLOAT)
 
-    // Bỏ trường GhiChu vì trong SQL không có
-
     public Diem() {}
 
     public Diem(String maMon, String maSV, double diem) {

@@ -2,38 +2,29 @@ package bus;
 
 import dao.SinhVienDAO;
 import dto.SinhVien;
-import helper.DataValidator; // Import class kiểm tra định dạng
+import helper.DataValidator;
 import java.util.List;
 
 public class SinhVienBUS {
 
     private SinhVienDAO sinhVienDAO = new SinhVienDAO();
 
-    /**
-     * Lấy toàn bộ danh sách sinh viên
-     */
+//  lấy toàn bộ danh sách sinh viên
     public List<SinhVien> getAllSinhVien() {
         return sinhVienDAO.getAll();
     }
 
-    /**
-     * Lấy danh sách sinh viên theo Lớp (Để lọc trên giao diện)
-     * Lưu ý: Cần đảm bảo SinhVienDAO đã có hàm getByLop
-     */
+//  lấy danh sách sinh viên theo lớp
     public List<SinhVien> getSinhVienByLop(String maLop) {
         return sinhVienDAO.getByLop(maLop); // Giả sử bạn đã viết hàm này trong DAO
     }
 
-    /**
-     * Tìm kiếm sinh viên
-     */
+//  tìm kiếm sinh viên
     public List<SinhVien> searchSinhVien(String keyword) {
         return sinhVienDAO.search(keyword); // Giả sử bạn đã viết hàm này trong DAO
     }
 
-    /**
-     * Thêm mới sinh viên
-     */
+//  thêm sinh viên
     public String addSinhVien(SinhVien sv) {
         // 1. Kiểm tra các trường bắt buộc
         if (sv.getMaSV().isEmpty()) {
@@ -46,21 +37,21 @@ public class SinhVienBUS {
             return "Vui lòng chọn Lớp quản lý!";
         }
 
-        // 2. Kiểm tra định dạng Email (Nếu có nhập)
+        // 2. Kiểm tra định dạng Email
         if (sv.getEmail() != null && !sv.getEmail().isEmpty()) {
             if (!DataValidator.isEmailValid(sv.getEmail())) {
                 return "Email không đúng định dạng!";
             }
         }
 
-        // 3. Kiểm tra số điện thoại (Nếu có nhập)
+        // 3. Kiểm tra số điện thoại
         if (sv.getDienThoai() != null && !sv.getDienThoai().isEmpty()) {
             if (!DataValidator.isPhoneValid(sv.getDienThoai())) {
                 return "Số điện thoại phải là 10 chữ số!";
             }
         }
 
-        // 4. Kiểm tra trùng mã (Gọi xuống DAO)
+        // 4. Kiểm tra trùng mã
         if (sinhVienDAO.existById(sv.getMaSV())) {
             return "Mã sinh viên " + sv.getMaSV() + " đã tồn tại trong hệ thống!";
         }
@@ -73,9 +64,7 @@ public class SinhVienBUS {
         }
     }
 
-    /**
-     * Cập nhật thông tin sinh viên
-     */
+//  cập nhật thông tin sinh viên
     public String updateSinhVien(SinhVien sv) {
         // Kiểm tra dữ liệu hợp lệ trước khi sửa
         if (sv.getHoSV().isEmpty() || sv.getTenSV().isEmpty()) {
@@ -103,13 +92,8 @@ public class SinhVienBUS {
         }
     }
 
-    /**
-     * Xóa sinh viên
-     */
+//  xóa sinh viên
     public String deleteSinhVien(String maSV) {
-        // Có thể thêm logic kiểm tra: Nếu sinh viên đã có điểm thi thì không cho xóa
-        // Tuy nhiên, logic đó thường nằm ở Database (Foreign Key Constraint)
-        // nên ở đây ta chỉ cần bắt kết quả trả về từ DAO.
 
         if (sinhVienDAO.delete(maSV)) {
             return "Xóa thành công!";

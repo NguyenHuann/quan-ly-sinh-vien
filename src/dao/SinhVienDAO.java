@@ -165,9 +165,7 @@ public class SinhVienDAO {
         return null;
     }
 
-    /**
-     * Helper: Ánh xạ từ ResultSet sang Object SinhVien
-     */
+    //  Ánh xạ từ ResultSet sang Object SinhVien
     private SinhVien mapResultSetToSinhVien(ResultSet rs) throws SQLException {
         SinhVien sv = new SinhVien();
         sv.setMaSV(rs.getString("MaSV"));
