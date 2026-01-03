@@ -58,7 +58,7 @@ public class SinhVienBUS {
 
         // 5. Gọi DAO để thêm vào DB
         if (sinhVienDAO.insert(sv)) {
-            return "Thêm sinh viên thành công!";
+            return "Thêm thành công!";
         } else {
             return "Thêm thất bại! Vui lòng kiểm tra lại kết nối.";
         }
